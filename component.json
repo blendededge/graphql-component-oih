@@ -1,0 +1,60 @@
+{
+  "title": "GraphQL Component",
+  "description": "GraphQL component for OIH",
+  "buildType": "docker",
+  "actions": {
+    "httpRequestAction": {
+      "main": "dist/actions/httpRequestAction.js",
+      "title": "HTTP Request Action",
+      "fields": {
+        "action": {
+          "label": "The action to take on the GraphQL Api",
+          "required": true
+        },
+        "body": {
+          "label": "The contents of your query or mutation",
+          "required": true
+        },
+        "headers": {
+          "label": "An array of additional headers for your request",
+          "required": false
+        },
+        "url": {
+          "label": "The endpoint URL for the GraphQL API",
+          "required": true
+        }
+      },
+      "metadata": {
+        "out": {}
+      }
+    }
+  },
+  "triggers": {
+    "triggerName": {
+      "main": "dist/actions/httpRequestTrigger.js",
+      "title": "HTTP Request Trigger",
+      "fields": {
+        "action": {
+          "label": "The action to take on the GraphQL Api",
+          "required": true
+        },
+        "body": {
+          "label": "The contents of your query or mutation",
+          "required": true
+        },
+        "headers": {
+          "label": "An array of additional headers for your request",
+          "required": false
+        },
+        "url": {
+          "label": "The endpoint URL for the GraphQL API",
+          "required": true
+        }
+      },
+      "type": "",
+      "metadata": {
+        "out": {}
+      }
+    }
+  }
+}
