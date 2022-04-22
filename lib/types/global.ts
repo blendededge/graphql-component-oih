@@ -14,6 +14,7 @@ export interface Config {
     action: string;
     body: string;
     headers: Headers[];
+    variables?: GenericObject,
     url: string;
     auth?: Auth,
     username?: string,
