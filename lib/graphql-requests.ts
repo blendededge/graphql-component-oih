@@ -12,9 +12,7 @@ enum Actions {
 const VARIABLES = 'variables';
 
 export const createGraphQLRequest = (msg: Message, cfg: Config, self: Self) => {
-    const { action, body, headers, url } = cfg;
-    const requestBody = createRequestString(action, body, msg, self, cfg);
-    self.logger.info('requestBody: ', requestBody)
+    const { headers, url } = cfg;
 
     const { auth } = getAuthFromSecretConfig(cfg, self);
     const bearerToken = (auth && auth.oauth2 && auth.oauth2.keys && auth.oauth2.keys.access_token ? auth.oauth2.keys.access_token : '');
@@ -23,24 +21,26 @@ export const createGraphQLRequest = (msg: Message, cfg: Config, self: Self) => {
     const requestUrl = transform(msg, { customMapping: url });
     self.logger.info('url: ', requestUrl)
 
-    return { requestBody, requestHeaders, requestUrl };
+    return { requestHeaders, requestUrl };
 }
 
-const createRequestString = (action: string, body: string, msg: Message, self: Self, cfg: Config) => {
-    const transformedBody = transform(msg, { customMapping: body });
-    self.logger.info('transformed Body: ', transformedBody);
+export const createQueryString = (self: Self, msg: Message, query: string): string => {
+    const transformedQuery = transform(msg, { customMapping: query });
+    self.logger.info('transformed Query string: ', transformedQuery);
+    return JSON.stringify({ [Actions.QUERY]: transformedQuery });
+}
 
-    if (action === Actions.QUERY) {
-        return JSON.stringify({ [Actions.QUERY]: transformedBody });
-    } else if (action === Actions.MUTATE) {
-        return JSON.stringify({
-            [Actions.QUERY]: transformedBody,
-            [VARIABLES]: cfg.variables
-        });
-    } else {
-        throw new Error(`Unsupported action provided: ${action}`);
+export const createMutateString = (self: Self, msg: Message, cfg: Config): string => {
+    const { query, variables } = cfg;
+    const transformedMutate = transform(msg, { customMapping: query });
+
+    self.logger.info('transformed Mutate string: ', transformedMutate);
+    if (!variables) {
+        return JSON.stringify({ [Actions.QUERY]: transformedMutate });
     }
-
+    const transformedVariables = transform(msg, { customMapping: variables });
+    self.logger.info('transformed Variables ', transformedVariables);
+    return JSON.stringify({ [Actions.QUERY]: transformedMutate, [VARIABLES]: transformedVariables });
 }
 
 const createRequestHeaders = (self: Self, bearerToken: string, auth?: Auth, headers?: Headers[]) => {

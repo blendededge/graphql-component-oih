@@ -1,58 +1,59 @@
+import { AxiosRequestHeaders } from 'axios';
+
 export type GenericObject = Record<string, unknown>;
 
 export const POST = 'POST';
 
 export interface Message {
     id: string,
-    attachments: GenericObject,
-    data?: GenericObject,
-    headers: GenericObject,
-    metadata: GenericObject
+    attachments: GenericObject;
+    data?: GenericObject;
+    headers: GenericObject;
+    metadata: GenericObject;
 }
 
 export interface Config {
-    action: string;
-    body: string;
+    query: string;
     headers: Headers[];
-    variables?: GenericObject,
+    variables?: string;
     url: string;
-    auth?: Auth,
-    username?: string,
-    passphrase?: string,
-    key?: string,
-    headerName?: string,
-    accessToken?: string,
-    secretAuthTransform?: string
+    auth?: Auth;
+    username?: string;
+    passphrase?: string;
+    key?: string;
+    headerName?: string;
+    accessToken?: string;
+    secretAuthTransform?: string;
 }
 
 export interface Headers {
-    key?: string,
-    value?: string
+    key?: string;
+    value?: string;
 }
 
 export interface Auth {
-    type?: string,
-    basic?: Basic,
-    apiKey?: ApiKey
-    oauth2?: OAuth2
+    type?: string;
+    basic?: Basic;
+    apiKey?: ApiKey;
+    oauth2?: OAuth2;
 }
 
 export interface Basic {
-    username: string,
-    password: string
+    username: string;
+    password: string;
 }
 
 export interface ApiKey {
-    headerName: string,
-    headerValue: string
+    headerName: string;
+    headerValue: string;
 }
 
 export interface OAuth2 {
-    keys: OAuth2Keys
+    keys: OAuth2Keys;
 }
 
 export interface OAuth2Keys {
-    access_token: string
+    access_token: string;
 }
 
 export enum AuthTypes {
@@ -60,6 +61,12 @@ export enum AuthTypes {
     BASIC = 'Basic Auth',
     API_KEY = 'API Key Auth',
     OAUTH2 = 'OAuth2'
+}
+
+export interface Request {
+    headers: AxiosRequestHeaders;
+    body: string;
+    url: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,4 +1,6 @@
-import { Auth, Self, AuthTypes, Headers } from './types/global';
+import axios from 'axios';
+import { newMessage } from './messages';
+import { Auth, Self, AuthTypes, Headers, Request } from './types/global';
 
 export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string, headers?: Array<Headers>,): Array<Headers> {
     const newHeaders = [];
@@ -36,4 +38,21 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
     }
 
     return newHeaders
+}
+
+export const makeRequest = async (self: Self, request: Request) => {
+  const { body, headers, url } = request;
+  try {
+    const { data } = await axios.post(url, body, {
+        headers: headers
+    });
+
+    const msg = newMessage(data);
+    await self.emit('data', msg);
+    await self.emit('end');
+} catch (e) {
+    self.logger.info('Error while making request to GraphQL API: ', (e as Error).message);
+    await self.emit('error', e);
+    await self.emit('end');
+}
 }
