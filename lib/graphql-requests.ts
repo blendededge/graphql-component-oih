@@ -61,7 +61,7 @@ const createRequestHeaders = (self: Self, bearerToken: string, auth?: Auth, head
             value: 'application/json'
         }
     );
-    self.logger.info('request headers: ', requestHeaders);
+    self.logger.debug('request headers: ', requestHeaders);
     return formatHeaders(requestHeaders);
 }
 

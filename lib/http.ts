@@ -41,8 +41,8 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
 
 export const makeRequest = async (self: Self, request: Request) => {
   const { body, headers, url } = request;
-  self.logger.info(`body before request: ${body}`);
-  self.logger.info(`headers before request: ${headers}`);
+  self.logger.debug(`body before request: ${body}`);
+  self.logger.debug(`headers before request: ${headers}`);
   try {
     const { data } = await axios.post(url, body, {
         headers: headers
