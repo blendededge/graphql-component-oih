@@ -8,12 +8,12 @@
   },
   "scripts": {
     "compile": "eslint . --ext .ts && tsc",
-    "test": "LOG_LEVEL=fatal ts-mocha test/**/*.test.ts --recursive --timeout 50000",
-    "test:debug": "LOG_LEVEL=trace DEBUG=nock.* ts-mocha test/**/*.test.ts --recursive --timeout 50000"
+    "test": "LOG_LEVEL=fatal ts-mocha test/**/*.test.ts",
+    "test:debug": "LOG_LEVEL=trace DEBUG=nock.* ts-mocha test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/blendededge/graphql-component-oih.git"
   },
   "keywords": [
     "GRAPHQL",
@@ -23,15 +23,14 @@
   "author": "Blended Edge",
   "license": "Apache-2.0",
   "dependencies": {
+    "@blendededge/ferryman-extensions": "^1.0.4",
     "@openintegrationhub/ferryman": "^2.1.0",
     "axios": "^0.26.1"
   },
   "devDependencies": {
-    "@elastic.io/component-logger": "0.0.1",
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.0",
     "@types/node": "^17.0.24",
-    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
     "chai": "^4.3.6",

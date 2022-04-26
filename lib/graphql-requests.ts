@@ -24,10 +24,16 @@ export const createGraphQLRequest = (msg: Message, cfg: Config, self: Self) => {
     return { requestHeaders, requestUrl };
 }
 
-export const createQueryString = (self: Self, msg: Message, query: string): string => {
+export const createQueryString = (self: Self, msg: Message, cfg: Config): string => {
+    const { query, variables } = cfg;
     const transformedQuery = transform(msg, { customMapping: query });
     self.logger.info('transformed Query string: ', transformedQuery);
-    return JSON.stringify({ [Actions.QUERY]: transformedQuery });
+    if (!variables) {
+        return JSON.stringify({ [Actions.QUERY]: transformedQuery });
+    }
+    const transformedVariables = transform(msg, { customMapping: variables });
+    self.logger.info('transformed Variables ', transformedVariables);
+    return JSON.stringify({ [Actions.QUERY]: transformedQuery, [VARIABLES]: transformedVariables })
 }
 
 export const createMutateString = (self: Self, msg: Message, cfg: Config): string => {

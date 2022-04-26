@@ -18,6 +18,10 @@
         "url": {
           "label": "The endpoint URL for the GraphQL API",
           "required": true
+        },
+        "variables": {
+          "label": "Any variables to be used in your query",
+          "required": "false"
         }
       },
       "metadata": {
@@ -41,7 +45,7 @@
           "required": true
         },
         "variables": {
-          "label": "",
+          "label": "Any variables to be used in your mutation",
           "required": "false"
         }
       },
@@ -66,6 +70,10 @@
         "url": {
           "label": "The endpoint URL for the GraphQL API",
           "required": true
+        },
+        "variables": {
+          "label": "Any variables to be used in your query",
+          "required": "false"
         }
       },
       "metadata": {
@@ -89,7 +97,7 @@
           "required": true
         },
         "variables": {
-          "label": "",
+          "label": "Any variables to be used in your mutation",
           "required": "false"
         }
       },

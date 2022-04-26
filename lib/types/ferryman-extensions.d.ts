@@ -1,0 +1,1 @@
+declare module '@blendededge/ferryman-extensions'
