@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "declaration": true,
+      "importHelpers": true,
+      "moduleResolution": "Node",
+      "module": "commonjs",
+      "outDir": "dist",
+      "rootDir": "lib",
+      "strict": true,
+      "target": "es2017",
+      "composite": true,
+      "esModuleInterop": true,
+      "types": ["mocha", "node"]
+    },
+    "include": [
+      "lib/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+  }

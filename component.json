@@ -1,0 +1,109 @@
+{
+  "title": "GraphQL Component",
+  "description": "GraphQL component for OIH",
+  "buildType": "docker",
+  "actions": {
+    "query": {
+      "main": "dist/actions/query.js",
+      "title": "GraphQL Query",
+      "fields": {
+        "query": {
+          "label": "The contents of your query",
+          "required": true
+        },
+        "headers": {
+          "label": "An array of additional headers for your request",
+          "required": false
+        },
+        "url": {
+          "label": "The endpoint URL for the GraphQL API",
+          "required": true
+        },
+        "variables": {
+          "label": "Any variables to be used in your query",
+          "required": "false"
+        }
+      },
+      "metadata": {
+        "out": {}
+      }
+    },
+    "mutate": {
+      "main": "dist/actions/mutate.js",
+      "title": "GraphQL Mutate",
+      "fields": {
+        "query": {
+          "label": "The contents of your mutation",
+          "required": true
+        },
+        "headers": {
+          "label": "An array of additional headers for your request",
+          "required": false
+        },
+        "url": {
+          "label": "The endpoint URL for the GraphQL API",
+          "required": true
+        },
+        "variables": {
+          "label": "Any variables to be used in your mutation",
+          "required": "false"
+        }
+      },
+      "metadata": {
+        "out": {}
+      }
+    }
+  },
+  "triggers": {
+    "query": {
+      "main": "dist/triggers/query.js",
+      "title": "GraphQL Query",
+      "fields": {
+        "query": {
+          "label": "The contents of your query",
+          "required": true
+        },
+        "headers": {
+          "label": "An array of additional headers for your request",
+          "required": false
+        },
+        "url": {
+          "label": "The endpoint URL for the GraphQL API",
+          "required": true
+        },
+        "variables": {
+          "label": "Any variables to be used in your query",
+          "required": "false"
+        }
+      },
+      "metadata": {
+        "out": {}
+      }
+    },
+    "mutate": {
+      "main": "dist/triggers/mutate.js",
+      "title": "GraphQL Mutate",
+      "fields": {
+        "query": {
+          "label": "The contents of your mutation",
+          "required": true
+        },
+        "headers": {
+          "label": "An array of additional headers for your request",
+          "required": false
+        },
+        "url": {
+          "label": "The endpoint URL for the GraphQL API",
+          "required": true
+        },
+        "variables": {
+          "label": "Any variables to be used in your mutation",
+          "required": "false"
+        }
+      },
+      "metadata": {
+        "out": {}
+      }
+    }
+  }
+}
