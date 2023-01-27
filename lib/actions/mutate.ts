@@ -9,7 +9,7 @@ async function processAction(this: Self, msg: Message, cfg: Config, snapshot: Ge
     self.logger.debug('msg: ', msg);
     self.logger.debug('cfg: ', cfg);
     self.logger.debug('snapshot :', snapshot);
-1
+
     const requestBody = createMutateString(self, msg, cfg);
 
     const { requestHeaders, requestUrl } = createGraphQLRequest(msg, cfg, self);
