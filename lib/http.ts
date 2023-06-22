@@ -48,6 +48,7 @@ export const makeRequest = async (self: Self, request: Request) => {
         headers: headers
     });
 
+    self.logger.debug('GraphQL response data: ', data);
     await self.emit('data', { data });
     await self.emit('end');
 } catch (e) {
