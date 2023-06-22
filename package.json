@@ -23,14 +23,14 @@
   "author": "Blended Edge",
   "license": "Apache-2.0",
   "dependencies": {
-    "@blendededge/ferryman-extensions": "^1.2.1",
+    "@blendededge/ferryman-extensions": "1.2.1",
     "@openintegrationhub/ferryman": "^2.1.1",
     "axios": "^0.26.1"
   },
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.0",
-    "@types/node": "^17.0.24",
+    "@types/node": "^20.3.1",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
     "chai": "^4.3.6",

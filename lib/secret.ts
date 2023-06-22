@@ -11,7 +11,7 @@ export function getAuthFromSecretConfig(cfg: Config, self: Self) {
   // Use JSONata to populate cfg.auth object, works for all types but especially helpful for the MIXED type
   if (secretAuthTransform) {
     returnConfig.auth = transform(cfg, { customMapping: secretAuthTransform });
-    self.logger.debug(`helpers.getAuthFromSecretConfig: after transforming auth config: ${JSON.stringify(returnConfig)}`);
+    self.logger.debug('helpers.getAuthFromSecretConfig: after transforming auth config: ', returnConfig);
     return returnConfig;
   }
   // Found username and password, authenticate with basic authentication
@@ -36,6 +36,6 @@ export function getAuthFromSecretConfig(cfg: Config, self: Self) {
     auth.oauth2.keys.access_token = accessToken;
   }
   returnConfig.auth = auth;
-  self.logger.debug(`getAuthFromSecretConfig: config object is now: ${JSON.stringify(returnConfig)}`);
+  self.logger.debug('getAuthFromSecretConfig: config object is now: ', returnConfig);
   return returnConfig;
 }
