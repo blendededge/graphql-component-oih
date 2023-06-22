@@ -1,6 +1,6 @@
 {
   "name": "graphql-component-oih",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GraphQL Component for OIH",
   "main": "node_modules/@openintegrationhub/ferryman/runGlobal.js",
   "engines": {
