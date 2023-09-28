@@ -41,14 +41,14 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
 
 export const makeRequest = async (self: Self, request: Request) => {
   const { body, headers, url } = request;
-  self.logger.debug('body before request: ', body);
-  self.logger.debug('headers before request: ', headers);
+  self.logger.debug('body before request: ', JSON.stringify(body));
+  self.logger.debug('headers before request: ', JSON.stringify(headers));
   try {
     const { data } = await axios.post(url, body, {
         headers: headers
     });
 
-    self.logger.debug('GraphQL response data: ', data);
+    self.logger.debug('GraphQL response data: ', JSON.stringify(data));
     await self.emit('data', { data });
     await self.emit('end');
 } catch (e) {

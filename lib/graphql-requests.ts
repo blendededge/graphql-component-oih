@@ -32,7 +32,7 @@ export const createQueryString = (self: Self, msg: Message, cfg: Config): string
         return JSON.stringify({ [Actions.QUERY]: transformedQuery });
     }
     const transformedVariables = transform(msg, { customMapping: variables });
-    self.logger.info('transformed Variables ', transformedVariables);
+    self.logger.info('transformed Variables ', JSON.stringify(transformedVariables));
     return JSON.stringify({ [Actions.QUERY]: transformedQuery, [VARIABLES]: transformedVariables })
 }
 
@@ -45,7 +45,7 @@ export const createMutateString = (self: Self, msg: Message, cfg: Config): strin
         return JSON.stringify({ [Actions.QUERY]: transformedMutate });
     }
     const transformedVariables = transform(msg, { customMapping: variables });
-    self.logger.info('transformed Variables ', transformedVariables);
+    self.logger.info('transformed Variables ', JSON.stringify(transformedVariables));
     return JSON.stringify({ [Actions.QUERY]: transformedMutate, [VARIABLES]: transformedVariables });
 }
 
@@ -61,7 +61,7 @@ const createRequestHeaders = (self: Self, bearerToken: string, auth?: Auth, head
             value: 'application/json'
         }
     );
-    self.logger.debug('request headers: ', requestHeaders);
+    self.logger.debug('request headers: ', JSON.stringify(requestHeaders));
     return formatHeaders(requestHeaders);
 }
 

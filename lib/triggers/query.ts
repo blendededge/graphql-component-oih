@@ -6,9 +6,9 @@ import { wrapper } from '@blendededge/ferryman-extensions';
 
 async function processTrigger(this: Self, msg: Message, cfg: Config, snapshot: GenericObject): Promise<void> {
     const self = wrapper(this, msg, cfg, snapshot);
-    self.logger.debug('msg: ', msg);
-    self.logger.debug('cfg: ', cfg);
-    self.logger.debug('snapshot :', snapshot);
+    self.logger.debug('msg: ', JSON.stringify(msg));
+    self.logger.debug('cfg: ', JSON.stringify(cfg));
+    self.logger.debug('snapshot :', JSON.stringify(snapshot));
 
     const requestBody = createQueryString(self, msg, cfg);
 
