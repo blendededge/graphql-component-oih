@@ -36,6 +36,6 @@ export function getAuthFromSecretConfig(cfg: Config, self: Self) {
     auth.oauth2.keys.access_token = accessToken;
   }
   returnConfig.auth = auth;
-  self.logger.debug('getAuthFromSecretConfig: config object is now: ', returnConfig);
+  self.logger.debug('getAuthFromSecretConfig: config object is now: ', JSON.stringify(returnConfig));
   return returnConfig;
 }
