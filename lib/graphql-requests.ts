@@ -66,14 +66,14 @@ const createRequestHeaders = (self: Self, bearerToken: string, auth?: Auth, head
 }
 
 function formatHeaders(requestHeaders: Headers[]) {
-    const formattedHeaders: AxiosRequestHeaders = {};
+    const formattedHeaders: AxiosRequestHeaders = Object.create(null);
     if (requestHeaders && requestHeaders.length) {
-      requestHeaders.forEach(header => {
-        if (!header.key || !header.value) {
-          return;
-        }
-        formattedHeaders[header.key.toLowerCase()] = header.value;
-      })
+        requestHeaders.forEach(header => {
+            if (!header.key || !header.value) {
+                return;
+            }
+            formattedHeaders[header.key.toLowerCase()] = header.value;
+        })
     }
-    return formattedHeaders
+    return formattedHeaders;
 }
