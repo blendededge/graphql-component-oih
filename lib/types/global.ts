@@ -5,7 +5,7 @@ export type GenericObject = Record<string, unknown>;
 export const POST = 'POST';
 
 export interface Message {
-    id: string,
+    id: string;
     attachments: GenericObject;
     data?: GenericObject;
     headers: GenericObject;
@@ -24,6 +24,8 @@ export interface Config {
     headerName?: string;
     accessToken?: string;
     secretAuthTransform?: string;
+    enableRebound?: boolean;
+    httpReboundErrorCodes?: number[];
 }
 
 export interface Headers {
@@ -67,6 +69,10 @@ export interface Request {
     headers: AxiosRequestHeaders;
     body: string;
     url: string;
+}
+
+export interface GlobalLogContext {
+    [key: string]: unknown;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
