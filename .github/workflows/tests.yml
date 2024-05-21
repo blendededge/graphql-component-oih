@@ -7,9 +7,8 @@ on:
   push:
     branches: [ 'main' ]
   # Triggers the workflow on pull events for all branches
-  # Commented out temporarily as there are no tests and this would fail. Added tests as issue in repo.
-  # pull_request:
-
+  pull_request:
+    branches: [ '*' ]
   # Allows you to run this workflow manually from the Actions tab
   # Commented out temporarily as there are no tests and this would fail. Added tests as issue in repo.
   workflow_dispatch:
