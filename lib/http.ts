@@ -42,12 +42,12 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
   return newHeaders
 }
 
-export const makeRequest = async (self: Self, request: Request, httpReboundErrorCodes?: number[], enableRebound = false, timeout = 2500) => { // 2500 is axios default timeout
+export const makeRequest = async (self: Self, request: Request, httpReboundErrorCodes?: number[], enableRebound = false, dontThrowErrorFlg = false, timeout = 2500) => { // 2500 is axios default timeout
   const { body, headers, url } = request;
   self.logger.debug('body before request: ', JSON.stringify(body));
   self.logger.debug('headers before request: ', JSON.stringify(headers));
 
-  const reboundErrorCodes = new Set(httpReboundErrorCodes) ?? HTTP_ERROR_CODE_REBOUND;
+  const reboundErrorCodes = getHttpReboundErrorCodes(httpReboundErrorCodes);
   try {
     const response = await axios.post(url, body, { timeout, headers });
     const { data, status } = response;
@@ -63,22 +63,22 @@ export const makeRequest = async (self: Self, request: Request, httpReboundError
       await self.emit('end');
     }
   } catch (e) {
-    await handleRequestError((e as Error | AxiosError<unknown, unknown>), self, httpReboundErrorCodes, enableRebound);
+    await handleRequestError((e as Error | AxiosError<unknown, unknown>), self, httpReboundErrorCodes, enableRebound, dontThrowErrorFlg);
   }
 };
 
-async function handleRequestError(e: Error | AxiosError, self: Self, httpReboundErrorCodes?: number[], enableRebound = false) {
-  const reboundErrorCodes = new Set(httpReboundErrorCodes) ?? HTTP_ERROR_CODE_REBOUND;
+async function handleRequestError(e: Error | AxiosError, self: Self, httpReboundErrorCodes?: number[], enableRebound = false, dontThrowErrorFlg = false) {
+  const reboundErrorCodes = getHttpReboundErrorCodes(httpReboundErrorCodes);
 
   self.logger.debug(`Configured HTTP error status codes for rebound are ${Array.from(reboundErrorCodes.values())}`);
 
   if (
-    (e instanceof AxiosError && e?.response && reboundErrorCodes.has(e?.response?.status)) ||
+    (enableRebound && e instanceof AxiosError && e?.response && reboundErrorCodes.has(e?.response?.status)) ||
     (enableRebound && (e instanceof AxiosError && e.code === AXIOS_TIMEOUT_ERROR || e.message.includes('DNS lookup timeout')))
   ) {
     self.logger.info('Starting rebound, Component error: ', JSON.stringify(e), addErrorLogContext(e));
     await self.emit('rebound', e.message);
-  } else if (e instanceof AxiosError && e.response) {
+  } else if (e instanceof AxiosError && e.response && dontThrowErrorFlg) {
     const output = {
       errorCode: e.response.status,
       errorMessage: e.message,
@@ -111,4 +111,8 @@ function addErrorLogContext(e: Error | AxiosError) {
     logContext.errorHeaders = e.response.headers;
   }
   return logContext;
+}
+
+function getHttpReboundErrorCodes(httpReboundErrorCodes: number[] | undefined) {
+  return httpReboundErrorCodes ? new Set(httpReboundErrorCodes) : HTTP_ERROR_CODE_REBOUND;
 }

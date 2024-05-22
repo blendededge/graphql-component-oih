@@ -26,6 +26,7 @@ export interface Config {
     secretAuthTransform?: string;
     enableRebound?: boolean;
     httpReboundErrorCodes?: number[];
+    dontThrowErrorFlg?: boolean;
 }
 
 export interface Headers {
