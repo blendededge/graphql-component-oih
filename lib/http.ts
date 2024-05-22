@@ -60,8 +60,8 @@ export const makeRequest = async (self: Self, request: Request, httpReboundError
       await self.emit('rebound', { status, data });
     } else {
       await self.emit('data', { data });
-      await self.emit('end');
     }
+    await self.emit('end');
   } catch (e) {
     await handleRequestError((e as Error | AxiosError<unknown, unknown>), self, httpReboundErrorCodes, enableRebound, dontThrowErrorFlg);
   }
@@ -78,6 +78,7 @@ async function handleRequestError(e: Error | AxiosError, self: Self, httpRebound
   ) {
     self.logger.info('Starting rebound, Component error: ', JSON.stringify(e), addErrorLogContext(e));
     await self.emit('rebound', e.message);
+    await self.emit('end');
   } else if (e instanceof AxiosError && e.response && dontThrowErrorFlg) {
     const output = {
       errorCode: e.response.status,
