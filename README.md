@@ -17,5 +17,6 @@ This project uses a `Config` object for configuration. Here are the properties o
 - `secretAuthTransform`: An optional string for the secret auth transform, if required for authentication.
 - `enableRebound`: An optional boolean to enable or disable rebound.
 - `httpReboundErrorCodes`: An optional array of numbers representing HTTP error codes that should trigger a rebound.
+- `dontThrowErrorFlg`: An optional boolean to enable or disable throwing an error or sending to the next step
 
 Please replace the placeholders with the actual information about your project.

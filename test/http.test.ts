@@ -58,11 +58,31 @@ describe('makeRequest', () => {
       .post('/graphql')
       .reply(503, { error: 'Service Unavailable' });
 
-    await makeRequest(self, request, [503], true);
+    await makeRequest(self, request, undefined, true);
 
     const reboundCall = self.emit.getCalls().find(call => call.args[0] === 'rebound');
     expect(reboundCall).to.not.be.undefined;
     expect(reboundCall.args[1]).to.equal('Request failed with status code 503');
+  });
+
+  it('should emit error event as data on non-rebound error', async () => {
+    const request: Request = {
+      headers: { 'Content-Type': 'application/json' } as unknown as AxiosHeaders,
+      body: JSON.stringify({ query: '{ example }' }),
+      url: 'https://api.example.com/graphql',
+    };
+
+    nock('https://api.example.com')
+      .post('/graphql')
+      .reply(400, { error: 'Bad Request' });
+
+    await makeRequest(self, request, [500], false, true);
+
+    const errorCall = self.emit.getCalls().find(call => call.args[0] === 'data');
+    expect(errorCall).to.not.be.undefined;
+    expect(errorCall.args[1]?.data?.errorCode).to.equal(400);
+    expect(errorCall.args[1]?.data?.errorMessage).to.equal('Request failed with status code 400');
+    // expect(self.emit.calledWith('error')).to.be.true;
   });
 
   it('should emit error event on non-rebound error', async () => {
@@ -76,13 +96,12 @@ describe('makeRequest', () => {
       .post('/graphql')
       .reply(400, { error: 'Bad Request' });
 
-    await makeRequest(self, request, [500], false);
+    await makeRequest(self, request, [500], false, false);
 
-    const errorCall = self.emit.getCalls().find(call => call.args[0] === 'data');
+    const errorCall = self.emit.getCalls().find(call => call.args[0] === 'error');
     expect(errorCall).to.not.be.undefined;
-    expect(errorCall.args[1]?.data?.errorCode).to.equal(400);
-    expect(errorCall.args[1]?.data?.errorMessage).to.equal('Request failed with status code 400');
-    // expect(self.emit.calledWith('error')).to.be.true;
+    expect(errorCall.args[1]?.response?.status).to.equal(400);
+    expect(errorCall.args[1]?.response?.data?.error).to.equal('Bad Request');
   });
 
   it('should emit rebound event on timeout', async () => {
@@ -97,7 +116,7 @@ describe('makeRequest', () => {
       .delay(300) // Simulate a timeout
       .reply(200, { data: { example: 'value' } });
 
-    await makeRequest(self, request, [500], true, 100);
+    await makeRequest(self, request, [500], true, false, 100);
 
     const reboundCall = self.emit.getCalls().find(call => call.args[0] === 'rebound');
     expect(reboundCall).to.not.be.undefined;
