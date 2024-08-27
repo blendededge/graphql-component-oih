@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
-import { Auth, Self, AuthTypes, Headers, Request, GlobalLogContext } from './types/global';
+import { Auth, Self, AuthTypes, Headers, Request, GlobalLogContext, ErrorHandlingConfig } from './types/global';
+import jsonata from 'jsonata';
 
 const HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 const AXIOS_TIMEOUT_ERROR = 'ECONNABORTED';
@@ -42,7 +43,7 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
   return newHeaders
 }
 
-export const makeRequest = async (self: Self, request: Request, httpReboundErrorCodes?: number[], enableRebound = false, dontThrowErrorFlg = false, timeout = 2500) => { // 2500 is axios default timeout
+export const makeRequest = async (self: Self, request: Request, httpReboundErrorCodes?: number[], enableRebound = false, dontThrowErrorFlg = false, timeout = 2500, errorConfig?: ErrorHandlingConfig) => { // 2500 is axios default timeout
   const { body, headers, url } = request;
   self.logger.debug('body before request: ', JSON.stringify(body));
   self.logger.debug('headers before request: ', JSON.stringify(headers));
@@ -55,17 +56,58 @@ export const makeRequest = async (self: Self, request: Request, httpReboundError
     self.logger.debug('GraphQL response data: ', JSON.stringify(data));
     self.logger.debug('GraphQL response status: ', status);
 
-    if (enableRebound && reboundErrorCodes.has(status)) {
+    if (isGraphQLError(data)) {
+      await handleGraphQLErrors(self, data, errorConfig);
+    } else if (enableRebound && reboundErrorCodes.has(status)) {
       self.logger.info(`Rebounding due to status code ${status}`);
       await self.emit('rebound', { status, data });
     } else {
-      await self.emit('data', { data });
+      const transformedData = errorConfig?.responseTransform
+        ? await jsonata(errorConfig.responseTransform).evaluate(data)
+        : data;
+      await self.emit('data', { data: transformedData });
     }
     await self.emit('end');
   } catch (e) {
     await handleRequestError((e as Error | AxiosError<unknown, unknown>), self, httpReboundErrorCodes, enableRebound, dontThrowErrorFlg);
   }
 };
+
+interface GraphQLResponse {
+  errors?: Array<{
+    message: string;
+    locations?: Array<{ line: number; column: number }>;
+    path?: Array<string | number>;
+    extensions?: Record<string, unknown>;
+  }>;
+  data?: Record<string, unknown>;
+}
+
+function isGraphQLError(response: GraphQLResponse): boolean {
+  return Array.isArray(response.errors) && response.errors.length > 0;
+}
+
+async function handleGraphQLErrors(self: Self, data: GraphQLResponse, errorConfig?: ErrorHandlingConfig) {
+  let errors = data.errors || [];
+
+  if (errorConfig?.errorTransform) {
+    try {
+      errors = await jsonata(errorConfig.errorTransform).evaluate(data) || [];
+    } catch (e) {
+      self.logger.error('Error applying error transform:', e);
+    }
+  }
+
+  for (const error of errors) {
+    const errorOutput = {
+      message: error.message,
+      locations: error.locations,
+      path: error.path,
+      extensions: error.extensions
+    };
+    await self.emit('error', new Error(JSON.stringify(errorOutput)));
+  }
+}
 
 async function handleRequestError(e: Error | AxiosError, self: Self, httpReboundErrorCodes?: number[], enableRebound = false, dontThrowErrorFlg = false) {
   const reboundErrorCodes = getHttpReboundErrorCodes(httpReboundErrorCodes);

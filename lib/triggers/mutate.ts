@@ -20,8 +20,9 @@ async function processTrigger(this: Self, msg: Message, cfg: Config, snapshot: S
         const httpReboundErrorCodes = cfg?.httpReboundErrorCodes;
         const enableRebound = cfg?.enableRebound || false;
         const dontThrowErrorFlg = cfg?.dontThrowErrorFlg || false;
+        const errorHandlingConfig = cfg?.errorHandling;
 
-        await makeRequest(self, { headers: requestHeaders, url: requestUrl, body: requestBody }, httpReboundErrorCodes, enableRebound, dontThrowErrorFlg);
+        await makeRequest(self, { headers: requestHeaders, url: requestUrl, body: requestBody }, httpReboundErrorCodes, enableRebound, dontThrowErrorFlg, undefined, errorHandlingConfig);
     } catch (e) {
         self.emit('error', e);
         self.logger.error(`Error while processing trigger: ${e}`);
