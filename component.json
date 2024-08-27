@@ -22,6 +22,14 @@
         "variables": {
           "label": "Any variables to be used in your query",
           "required": "false"
+        },
+        "errorTransform": {
+          "label": "JSONata expression to transform GraphQL errors",
+          "required": false
+        },
+        "responseTransform": {
+          "label": "JSONata expression to transform the entire response",
+          "required": false
         }
       },
       "metadata": {
@@ -47,6 +55,14 @@
         "variables": {
           "label": "Any variables to be used in your mutation",
           "required": "false"
+        },
+        "errorTransform": {
+          "label": "JSONata expression to transform GraphQL errors",
+          "required": false
+        },
+        "responseTransform": {
+          "label": "JSONata expression to transform the entire response",
+          "required": false
         }
       },
       "metadata": {
@@ -74,6 +90,14 @@
         "variables": {
           "label": "Any variables to be used in your query",
           "required": "false"
+        },
+        "errorTransform": {
+          "label": "JSONata expression to transform GraphQL errors",
+          "required": false
+        },
+        "responseTransform": {
+          "label": "JSONata expression to transform the entire response",
+          "required": false
         }
       },
       "metadata": {
@@ -99,6 +123,14 @@
         "variables": {
           "label": "Any variables to be used in your mutation",
           "required": "false"
+        },
+        "errorTransform": {
+          "label": "JSONata expression to transform GraphQL errors",
+          "required": false
+        },
+        "responseTransform": {
+          "label": "JSONata expression to transform the entire response",
+          "required": false
         }
       },
       "metadata": {

@@ -12,6 +12,11 @@ export interface Message {
     metadata: GenericObject;
 }
 
+export interface ErrorHandlingConfig {
+    errorTransform?: string;
+    responseTransform?: string;
+}
+
 export interface Config {
     query: string;
     headers: Headers[];
@@ -27,6 +32,7 @@ export interface Config {
     enableRebound?: boolean;
     httpReboundErrorCodes?: number[];
     dontThrowErrorFlg?: boolean;
+    errorHandling?: ErrorHandlingConfig;
 }
 
 export interface Headers {
