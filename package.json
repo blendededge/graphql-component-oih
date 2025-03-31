@@ -24,7 +24,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@blendededge/ferryman-extensions": "^2.0.6",
-    "@openintegrationhub/ferryman": "^2.4.5",
+    "@openintegrationhub/ferryman": "^2.4.6",
     "axios": "^1.7.9",
     "jsonata": "^2.0.5"
   },
