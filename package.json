@@ -23,7 +23,7 @@
   "author": "Blended Edge",
   "license": "Apache-2.0",
   "dependencies": {
-    "@blendededge/ferryman-extensions": "^2.0.6",
+    "@blendededge/ferryman-extensions": "^2.1.0",
     "@openintegrationhub/ferryman": "^2.4.6",
     "axios": "^1.8.4",
     "jsonata": "^2.0.5"
