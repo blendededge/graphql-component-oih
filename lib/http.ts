@@ -43,7 +43,7 @@ export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string,
   return newHeaders
 }
 
-export const makeRequest = async (self: Self, request: Request, httpReboundErrorCodes?: number[], enableRebound = false, dontThrowErrorFlg = false, timeout = 2500, errorConfig?: ErrorHandlingConfig) => { // 2500 is axios default timeout
+export const makeRequest = async (self: Self, request: Request, httpReboundErrorCodes?: number[], enableRebound = false, dontThrowErrorFlg = false, timeout = 10000, errorConfig?: ErrorHandlingConfig) => { // 10000 (10s) is axios default timeout
   const { body, headers, url } = request;
   self.logger.debug('body before request: ', JSON.stringify(body));
   self.logger.debug('headers before request: ', JSON.stringify(headers));
