@@ -8,21 +8,22 @@ const HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 const AXIOS_TIMEOUT_ERROR = 'ECONNABORTED';
 
 const MAX_SOCKETS = process.env.MAX_SOCKETS ? parseInt(process.env.MAX_SOCKETS) : 3;
+const HTTP_CONFIG_KEEP_ALIVE = process.env.HTTP_CONFIG_KEEP_ALIVE && process.env.HTTP_CONFIG_KEEP_ALIVE.toLowerCase() === 'false' ? false : true;
 
 const httpAgent = new http.Agent({
-  keepAlive: true,              // Enable connection reuse
-  keepAliveMsecs: 30000,        // Keep idle connections alive for 30 seconds
-  maxSockets: MAX_SOCKETS,      // Limit concurrent connections to 3
-  maxFreeSockets: MAX_SOCKETS,  // Keep up to 3 idle connections ready for reuse
-  timeout: 5000,                // Socket timeout (5s)
+  keepAlive: HTTP_CONFIG_KEEP_ALIVE,  // Enable connection reuse, defaults to true
+  keepAliveMsecs: 30000,              // Keep idle connections alive for 30 seconds
+  maxSockets: MAX_SOCKETS,            // Limit concurrent connections to 3
+  maxFreeSockets: MAX_SOCKETS,        // Keep up to 3 idle connections ready for reuse
+  timeout: 5000,                      // Socket timeout (5s)
 });
 
 const httpsAgent = new https.Agent({
-  keepAlive: true,              // Enable connection reuse
-  keepAliveMsecs: 30000,        // Keep idle connections alive for 30 seconds
-  maxSockets: MAX_SOCKETS,      // Limit concurrent connections to 3
-  maxFreeSockets: MAX_SOCKETS,  // Keep up to 3 idle connections ready for reuse
-  timeout: 5000,                // Socket timeout (5s)
+  keepAlive: HTTP_CONFIG_KEEP_ALIVE,  // Enable connection reuse, defaults to true
+  keepAliveMsecs: 30000,              // Keep idle connections alive for 30 seconds
+  maxSockets: MAX_SOCKETS,            // Limit concurrent connections to 3
+  maxFreeSockets: MAX_SOCKETS,        // Keep up to 3 idle connections ready for reuse
+  timeout: 5000,                    // Socket timeout (5s)
 });
 
 export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string, headers?: Array<Headers>,): Array<Headers> {
@@ -67,6 +68,8 @@ export const makeRequest = async (self: Self, request: Request, httpReboundError
   const { body, headers, url } = request;
   self.logger.debug('body before request: ', JSON.stringify(body));
   self.logger.debug('headers before request: ', JSON.stringify(headers));
+  self.logger.debug(`HTTP_CONFIG_KEEP_ALIVE: ${HTTP_CONFIG_KEEP_ALIVE}`);
+  self.logger.debug(`MAX_SOCKETS: ${MAX_SOCKETS}`);
 
   self.emit('trace:graphql-request', {
     url,
