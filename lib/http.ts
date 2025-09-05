@@ -66,6 +66,12 @@ export const makeRequest = async (self: Self, request: Request, httpReboundError
   self.logger.debug('body before request: ', JSON.stringify(body));
   self.logger.debug('headers before request: ', JSON.stringify(headers));
 
+  self.emit('trace:graphql-request', {
+    url,
+    headers,
+    body,
+  });
+
   const reboundErrorCodes = getHttpReboundErrorCodes(httpReboundErrorCodes);
   try {
     const response = await axios.post(url, body, {
