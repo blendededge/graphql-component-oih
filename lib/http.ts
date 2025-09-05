@@ -69,7 +69,7 @@ export const makeRequest = async (self: Self, request: Request, httpReboundError
   self.logger.debug('body before request: ', JSON.stringify(body));
   self.logger.debug('headers before request: ', JSON.stringify(headers));
   self.logger.debug(`HTTP_CONFIG_KEEP_ALIVE: ${HTTP_CONFIG_KEEP_ALIVE}`);
-  self.logger.debug(`MAX_SOCKETS: ${MAX_SOCKETS}`);
+  self.logger.debug(`HTTP_CONFIG_MAX_SOCKETS: ${HTTP_CONFIG_MAX_SOCKETS}`);
 
   self.emit('trace:graphql-request', {
     url,
