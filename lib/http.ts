@@ -7,22 +7,22 @@ import jsonata from 'jsonata';
 const HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 const AXIOS_TIMEOUT_ERROR = 'ECONNABORTED';
 
-const MAX_SOCKETS = process.env.MAX_SOCKETS ? parseInt(process.env.MAX_SOCKETS) : 3;
+const HTTP_CONFIG_MAX_SOCKETS = process.env.MAX_SOCKETS ? parseInt(process.env.MAX_SOCKETS) : 3;
 const HTTP_CONFIG_KEEP_ALIVE = process.env.HTTP_CONFIG_KEEP_ALIVE && process.env.HTTP_CONFIG_KEEP_ALIVE.toLowerCase() === 'false' ? false : true;
 
 const httpAgent = new http.Agent({
   keepAlive: HTTP_CONFIG_KEEP_ALIVE,  // Enable connection reuse, defaults to true
   keepAliveMsecs: 30000,              // Keep idle connections alive for 30 seconds
-  maxSockets: MAX_SOCKETS,            // Limit concurrent connections to 3
-  maxFreeSockets: MAX_SOCKETS,        // Keep up to 3 idle connections ready for reuse
+  maxSockets: HTTP_CONFIG_MAX_SOCKETS,            // Limit concurrent connections to 3
+  maxFreeSockets: HTTP_CONFIG_MAX_SOCKETS,        // Keep up to 3 idle connections ready for reuse
   timeout: 5000,                      // Socket timeout (5s)
 });
 
 const httpsAgent = new https.Agent({
   keepAlive: HTTP_CONFIG_KEEP_ALIVE,  // Enable connection reuse, defaults to true
   keepAliveMsecs: 30000,              // Keep idle connections alive for 30 seconds
-  maxSockets: MAX_SOCKETS,            // Limit concurrent connections to 3
-  maxFreeSockets: MAX_SOCKETS,        // Keep up to 3 idle connections ready for reuse
+  maxSockets: HTTP_CONFIG_MAX_SOCKETS,            // Limit concurrent connections to 3
+  maxFreeSockets: HTTP_CONFIG_MAX_SOCKETS,        // Keep up to 3 idle connections ready for reuse
   timeout: 5000,                    // Socket timeout (5s)
 });
 
