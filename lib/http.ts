@@ -1,9 +1,27 @@
+import http from 'http';
+import https from 'https';
 import axios, { AxiosError } from 'axios';
 import { Auth, Self, AuthTypes, Headers, Request, GlobalLogContext, ErrorHandlingConfig } from './types/global';
 import jsonata from 'jsonata';
 
 const HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 const AXIOS_TIMEOUT_ERROR = 'ECONNABORTED';
+
+const httpAgent = new http.Agent({
+  keepAlive: true,        // Enable connection reuse
+  keepAliveMsecs: 30000,  // Keep idle connections alive for 30 seconds
+  maxSockets: 3,          // Limit concurrent connections to 3
+  maxFreeSockets: 3,      // Keep up to 3 idle connections ready for reuse
+  timeout: 30000,         // Socket timeout (30s)
+});
+
+const httpsAgent = new https.Agent({
+  keepAlive: true,        // Enable connection reuse
+  keepAliveMsecs: 30000,  // Keep idle connections alive for 30 seconds
+  maxSockets: 3,          // Limit concurrent connections to 3
+  maxFreeSockets: 3,      // Keep up to 3 idle connections ready for reuse
+  timeout: 30000,         // Socket timeout (30s)
+});
 
 export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string, headers?: Array<Headers>,): Array<Headers> {
   const newHeaders = [];
@@ -50,7 +68,12 @@ export const makeRequest = async (self: Self, request: Request, httpReboundError
 
   const reboundErrorCodes = getHttpReboundErrorCodes(httpReboundErrorCodes);
   try {
-    const response = await axios.post(url, body, { timeout, headers });
+    const response = await axios.post(url, body, {
+      timeout,
+      headers,
+      httpAgent,
+      httpsAgent
+    });
     const { data, status } = response;
 
     self.logger.debug('GraphQL response data: ', JSON.stringify(data));
