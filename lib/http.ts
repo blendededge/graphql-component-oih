@@ -7,20 +7,22 @@ import jsonata from 'jsonata';
 const HTTP_ERROR_CODE_REBOUND = new Set([408, 423, 429, 500, 502, 503, 504]);
 const AXIOS_TIMEOUT_ERROR = 'ECONNABORTED';
 
+const MAX_SOCKETS = process.env.MAX_SOCKETS ? parseInt(process.env.MAX_SOCKETS) : 3;
+
 const httpAgent = new http.Agent({
-  keepAlive: true,        // Enable connection reuse
-  keepAliveMsecs: 30000,  // Keep idle connections alive for 30 seconds
-  maxSockets: 3,          // Limit concurrent connections to 3
-  maxFreeSockets: 3,      // Keep up to 3 idle connections ready for reuse
-  timeout: 30000,         // Socket timeout (30s)
+  keepAlive: true,              // Enable connection reuse
+  keepAliveMsecs: 30000,        // Keep idle connections alive for 30 seconds
+  maxSockets: MAX_SOCKETS,      // Limit concurrent connections to 3
+  maxFreeSockets: MAX_SOCKETS,  // Keep up to 3 idle connections ready for reuse
+  timeout: 5000,                // Socket timeout (5s)
 });
 
 const httpsAgent = new https.Agent({
-  keepAlive: true,        // Enable connection reuse
-  keepAliveMsecs: 30000,  // Keep idle connections alive for 30 seconds
-  maxSockets: 3,          // Limit concurrent connections to 3
-  maxFreeSockets: 3,      // Keep up to 3 idle connections ready for reuse
-  timeout: 30000,         // Socket timeout (30s)
+  keepAlive: true,              // Enable connection reuse
+  keepAliveMsecs: 30000,        // Keep idle connections alive for 30 seconds
+  maxSockets: MAX_SOCKETS,      // Limit concurrent connections to 3
+  maxFreeSockets: MAX_SOCKETS,  // Keep up to 3 idle connections ready for reuse
+  timeout: 5000,                // Socket timeout (5s)
 });
 
 export function populateAuthHeaders(auth: Auth, self: Self, bearerToken: string, headers?: Array<Headers>,): Array<Headers> {
